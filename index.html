@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+        svg {
+           border: 1px solid #f90;
+            margin: 32px;
+        }
+        rect {
+            float: left;
+            border: solid 100px #aaa;
+        }
+
+        .legend text h1{
+            font-family: arial;
+            font-size: 12px;
+            fill: lightgray;
+        }
+        h1{
+            font-family: Arial;
+            color: #0d807c;
+            margin-left: 40px;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<h1>Dynamic Colorbar Adjustable Legend</h1>
+<body>
+
+<!-- <form id = "form" onsubmit = "return false;">
+    <div style="margin-left: 3%">
+    left color: <input type = "text" name = "left color" id = "leftColor">
+    right color: <input type = "text" name = "right color" id = "rightColor">
+    <button type="button">Submit</button>
+  </div>
+
+</form> -->
+
+<script>
+    var left_color = window.prompt("Which color do you want the scale to start from? ");
+    var right_color = window.prompt("Which color do you want the scale to end at?");
+    var left_axis = window.prompt("Enter the number you want to start your axis from");
+    var right_axis = window.prompt("Enter the number you want to end your axis at");
+    var width = 800,
+            height = 320;
+    var sliderData = [{
+        x: 100,
+        y: 20
+    },
+        {
+            x: 600,
+            y: 20
+        }
+    ];
+  //let leftColor, rightColor;
+  /*function getInputFromTextBox() {
+
+    leftColor = document.getElementById("leftColor").value;
+    rightColor = document.getElementById("rightColor").value;
+
+    //console.log(leftColor);
+    //console.log(rightColor);
+    var colorScale = d3.scale.linear()
+                     .domain([1, 10])
+                     .range([leftColor, rightColor]);
+
+    }*/
+
+
+    var drag = d3.behavior.drag()
+            .origin(Object)
+            .on("drag", dragMove)
+            .on("dragend", dragEnd);
+
+
+
+    var svg = d3.select('body')
+            .append('svg')
+            .style('float','left')
+            .attr("height", 250)
+            .attr("width", width);
+
+    var g = svg.append('g')
+            .attr("height", 200)
+            .attr("width", width)
+            .attr('transform', 'translate(0, 10)');
+    var rect = g
+            .append('rect')
+            .attr('y', 17.5)
+            .attr("height", 5)
+            .attr("width", width)
+            .attr('fill', '#C0C0C0');
+
+    var text1 =    g
+                  .append("text")
+                  .attr("x", 40)
+                  .attr("y", 200)
+                  .text('Left Slider Value: Not Moved')
+                  .attr("class","left-text")
+
+    var text2 =    g
+                   .append("text")
+                   .attr("x", 590)
+                   .attr("y", 200)
+                   .text('Right Slider Value: Not Moved')
+                   .attr("class","right-text")
+
+
+
+    g.selectAll('g')
+            .data(sliderData)
+            .enter()
+            .append("rect")
+            .attr("id",function(d,i){
+                return "slider" + i;
+            })
+            .attr("class", function(d,i){
+              console.log(i);
+              return i;
+            })
+            .attr("width", 10)
+            .attr("x", function(d) {
+                return d.x
+            })
+            .attr("y", function(d) {
+                return 0;
+            })
+            .attr("height", 40)
+            .attr("fill", "#2394F5")
+            .call(drag);
+
+    svg.append('g')
+            .attr('id','legendGroup');
+   var axisScale = d3.scale.linear()
+                     .domain([left_axis, right_axis])
+                     .range([10,780]);
+   var xAxis = d3.svg.axis()
+                 .scale(axisScale)
+                 .orient("bottom");
+    svg.append("g")
+       .attr("transform", "translate(0,120)")
+       .call(xAxis);
+
+       /*document.querySelector("button").addEventListener("click", function(){
+         leftColor = document.getElementById("leftColor").value;
+         rightColor = document.getElementById("rightColor").value;
+
+       });*/
+
+      // console.log(leftColor);
+       //console.log(rightColor);
+
+
+    function draw(minMax){
+        var minVal = minMax[0];
+        var maxVal = minMax[1];
+        var data = d3.range(Math.round(minVal),Math.round(maxVal), (Math.round(maxVal) - Math.round(minVal))/20);
+        var o = d3.scale.ordinal()
+                .domain(data)
+                .rangeBands([Math.round(minVal), Math.round(maxVal)]);
+
+
+        var colorScale = d3.scale.linear()
+                         .domain([1, 10])
+                         .range([left_color, right_color]);
+
+
+        var legend = d3.select('#legendGroup')
+                .selectAll('rect.example2')
+                .data(data);
+
+
+        // enter selection
+        legend.enter().append('rect');
+
+
+        // update selection
+        legend.attr('class', 'example2')
+                .attr('id',function(d,i){
+                    return "rect"+i;
+                })
+                .style('fill', function(d,i){return colorScale(i)})
+                .attr('x', function(d) { return Math.round(o(d)) })
+                .attr('y', 60)
+                .attr('width', Math.round(o.rangeBand()))
+                .attr('height', 50);
+
+
+
+        // exit selection
+        legend
+                .exit().remove();
+
+        var rectLeft = d3.select('#legendGroup').selectAll('#rect-left')
+                .data([data[0]]);
+        var rectRight = d3.select('#legendGroup').selectAll('#rect-right')
+                .data([data[data.length - 1]]);
+
+        // enter left right
+        rectLeft.enter().append('rect');
+        rectRight.enter().append('rect');
+        //append left right
+        rectLeft
+                .attr('id','rect-left')
+                .style('fill', colorScale(0))
+                .attr('x',0)
+                .attr('y', 60)
+                .attr('width', Math.round(o(data[0])))
+                .attr('height', 50);
+        rectRight
+                .attr('id','rect-left')
+                .style('fill', colorScale(20))
+                .attr('x',Math.round(o(data[data.length - 1])))
+                .attr('y', 60)
+                .attr('width', width - Math.round(o(data[data.length - 1])))
+                .attr('height', 50);
+      //  console.log(data[data.length - 1]);
+
+        // exit left right
+        rectLeft.exit().remove();
+        rectRight.exit().remove()
+    }
+    function dragMove(d) {
+        d3.select(this)
+                .attr("opacity", 0.6)
+                .attr("x", d.x = Math.max(10, Math.min(width-20, d3.event.x)));
+
+        let dataValue = axisScale.invert(d.x).toFixed(2);
+
+        if (d3.select(this)
+             .classed("0") == true){
+               d3.selectAll(".left-text")
+                 .text("Left Slider Value: " + dataValue)
+               }
+        if (d3.select(this)
+            .classed("1") == true){
+               d3.selectAll(".right-text")
+                  .text("Right Slider Value: " + dataValue)
+              }
+        //console.log(dataValue);
+        update()
+    }
+
+    function dragEnd() {
+        d3.select(this)
+                .attr('opacity', 1);
+        }
+
+    function update(){
+        var val1 = d3.select('#slider0').data().map(function(d){return d.x;});
+        var val2 = d3.select('#slider1').data().map(function(d){return d.x;});
+
+        var minVal = d3.min([val1[0], val2[0]]);
+        var maxVal = d3.max([val1[0], val2[0]]);
+        var minMax = [minVal, maxVal];
+        draw(minMax);
+    }
+    var val1 = d3.select('#slider0').data().map(function(d){return d.x;});
+    var val2 = d3.select('#slider1').data().map(function(d){return d.x;});
+
+    var minVal = d3.min([val1[0], val2[0]]);
+    var maxVal = d3.max([val1[0], val2[0]]);
+    var minMax = [minVal, maxVal];
+    window.onload = draw(minMax);
+
+   //console.log("Hello");
+
+</script>
+</body>
+</html>
