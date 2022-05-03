@@ -13,8 +13,8 @@ This is a research project that focuses on developing an usable widget that can 
 * The user can choose the colors the colorbar would be presented with (as a range, from one color to another)
 * The user can choose the scale the colorbar would represent (as a range, from one number to another)
 
-## Plans of Further Features
-* Letting the user decide the width and height of the colorbar
+## Status
+The project is open to further development in the future. Features such as letting the user decide the width and height of the colorbar is one thing that is to be implemented.
 
 ## Sources
 This project is based on Adjustable Colorbar on bl.ocks.org ( https://bl.ocks.org/ssmaroju/9e0b51c2e0cdf82dee6b )
