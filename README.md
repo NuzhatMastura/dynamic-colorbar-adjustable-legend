@@ -10,7 +10,7 @@ This is a research project that focuses on developing an usable widget that can 
 
 ## Features
 * The user can drag the sliders which are over the colorbar and see which number either of the slider is on the colorbar
-* The user can choose the colors the colorbar would be presented with (as a range, from one color to another)
+* The user can choose the colors the colorbar would be presented with (as a dynamic range, from one color to another)
 * The user can choose the scale the colorbar would represent (as a range, from one number to another)
 
 ## Status
