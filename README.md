@@ -17,5 +17,5 @@ This is a research project that focuses on developing an usable widget that can 
 The project is open to further development in the future. Features such as letting the user decide the width and height of the colorbar is one thing that is to be implemented.
 
 ## Sources
-This project is based on Adjustable Colorbar on bl.ocks.org ( https://bl.ocks.org/ssmaroju/9e0b51c2e0cdf82dee6b )
+This project is based on Adjustable Colorbar on bl.ocks.org (https://bl.ocks.org/ssmaroju/9e0b51c2e0cdf82dee6b )
 
