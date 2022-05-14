@@ -29,20 +29,15 @@
 </head>
 <body>
 
-<!-- <form id = "form" onsubmit = "return false;">
-    <div style="margin-left: 3%">
-    left color: <input type = "text" name = "left color" id = "leftColor">
-    right color: <input type = "text" name = "right color" id = "rightColor">
-    <button type="button">Submit</button>
-  </div>
-
-</form> -->
-
 <script>
+    
+    // these four lines of code prompts the user to input the colors and axis they want from the colorbar
     var left_color = window.prompt("Which color do you want the scale to start from? ");
     var right_color = window.prompt("Which color do you want the scale to end at?");
     var left_axis = window.prompt("Enter the number you want to start your axis from");
     var right_axis = window.prompt("Enter the number you want to end your axis at");
+    
+    //height, width 
     var width = 800,
             height = 320;
     var sliderData = [{
@@ -54,21 +49,10 @@
             y: 20
         }
     ];
-  //let leftColor, rightColor;
-  /*function getInputFromTextBox() {
-
-    leftColor = document.getElementById("leftColor").value;
-    rightColor = document.getElementById("rightColor").value;
-
-    //console.log(leftColor);
-    //console.log(rightColor);
-    var colorScale = d3.scale.linear()
-                     .domain([1, 10])
-                     .range([leftColor, rightColor]);
-
-    }*/
 
 
+    // controls the drag behaviour of the sliders
+    
     var drag = d3.behavior.drag()
             .origin(Object)
             .on("drag", dragMove)
@@ -143,15 +127,6 @@
        .attr("transform", "translate(0,120)")
        .call(xAxis);
 
-       /*document.querySelector("button").addEventListener("click", function(){
-         leftColor = document.getElementById("leftColor").value;
-         rightColor = document.getElementById("rightColor").value;
-
-       });*/
-
-      // console.log(leftColor);
-       //console.log(rightColor);
-
 
     function draw(minMax){
         var minVal = minMax[0];
@@ -216,12 +191,13 @@
                 .attr('y', 60)
                 .attr('width', width - Math.round(o(data[data.length - 1])))
                 .attr('height', 50);
-      //  console.log(data[data.length - 1]);
+
 
         // exit left right
         rectLeft.exit().remove();
         rectRight.exit().remove()
     }
+    
     function dragMove(d) {
         d3.select(this)
                 .attr("opacity", 0.6)
@@ -239,7 +215,7 @@
                d3.selectAll(".right-text")
                   .text("Right Slider Value: " + dataValue)
               }
-        //console.log(dataValue);
+       
         update()
     }
 
@@ -265,7 +241,6 @@
     var minMax = [minVal, maxVal];
     window.onload = draw(minMax);
 
-   //console.log("Hello");
 
 </script>
 </body>
